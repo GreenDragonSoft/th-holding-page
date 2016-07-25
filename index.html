@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='https://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/jquery.lettering-0.6.1.min.js"></script>
+    <script src="js/jquery.textillate.js"></script>
+    <script src="js/jquery.waitforimages.js"></script>
+
+    <style>
+
+html{
+  /* This image will be displayed fullscreen */
+  /*background:url('background.jpg') no-repeat center center;*/
+  background-image: url('background.jpg');
+
+  /* Ensure the html element always takes up the full height of the browser window */
+  height: 100%;
+  min-height:100%;
+
+  /* The Magic */
+  background-size:cover;
+}
+
+body {
+  height: 100%;
+  min-height:100%;
+  margin: 0;
+  padding: 0 20px 0 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'La Belle Aurore', serif;
+}
+
+p.message {
+  margin: 0;
+  font-size: 24px;
+}
+
+span.prompt {
+  font-size: 48px;
+}
+
+input {
+  background: url('input_bg.png') no-repeat;
+  background-clip: content-box;
+  height: 50px;
+  width: 90%;
+  margin-left: 10%;
+  font-size: 36px;
+  outline: none;
+  border: none;
+  font-family: inherit;
+  margin-top: 30px;
+}
+
+input.invisible {
+  opacity: 0;
+}
+
+.vertical-center-parent {
+}
+
+.vertical-center-child {
+}
+
+.hidden {
+  display: none;
+}
+
+    </style>
+  </head>
+
+  <body>
+    <div class="content">
+
+      <p class="message hidden">
+Take 20 in the Phil, surely the most ornate pub in the land. Don't leave without a visit to the men's room (ladies too) but hold your nose! When you're ready, "continue".
+      </p>
+
+      <form>
+	  <input type="text" class="invisible">
+      </form>
+
+    </div>
+
+    <script>
+      var kickOffTextAnimation = function() {
+
+	var msg = $('p.message');
+
+	msg.removeClass("hidden");
+
+	msg.textillate( {
+	  autoStart: false,
+	  in: {
+	    effect: 'fadeInLeft',
+	    delay: 10,
+	    callback: function() {
+	      $('input').animate({opacity: 1})
+	      $('input').removeClass('invisible');
+	    }
+	  },
+	  out: {
+	    effect: 'fadeOutRight',
+	    sync: true,
+	  }
+	});
+
+	msg.textillate('start');
+
+	msg.on('inAnimationEnd.tlt', function () {
+	    setTimeout(function() {
+	      msg.textillate('out');
+	    }, 10000);
+	});
+      };
+
+      $('html').waitForImages(true).done(function() {
+	  console.log("GOT IMAGES");
+	  kickOffTextAnimation();
+      });
+    </script>
+
+  </body>
+</html>
