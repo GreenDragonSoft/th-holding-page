@@ -82,8 +82,12 @@ input.invisible {
   <body>
     <div class="content">
 
-      <p class="message hidden">
-Take 20 in the Phil, surely the most ornate pub in the land. Don't leave without a visit to the men's room (ladies too) but hold your nose! When you're ready, "continue".
+      <p class="message message-1 hidden">
+Welcome, Treasure Hunters. To join the game, your fellow adventurers will need the password "rusty peg leg". Once you're at the Bombed Out Church, write "go"
+      </p>
+
+      <p class="message message-2 hidden">
+I watch over Bold Street. Some say I'm two faced but really it's three. What's the sum of my greater hands?
       </p>
 
       <form>
@@ -95,18 +99,19 @@ Take 20 in the Phil, surely the most ornate pub in the land. Don't leave without
     <script>
       var kickOffTextAnimation = function() {
 
-	var msg = $('p.message');
+	var message1 = $('p.message-1'),
+	    message2 = $('p.message-2'),
+	    textInput = $('input');
 
-	msg.removeClass("hidden");
+	message1.removeClass("hidden");
 
-	msg.textillate( {
-	  autoStart: false,
+	message1.textillate( {
 	  in: {
 	    effect: 'fadeInLeft',
-	    delay: 10,
+	    delay: 20,
 	    callback: function() {
-	      $('input').animate({opacity: 1})
-	      $('input').removeClass('invisible');
+	      textInput.animate({opacity: 1})
+	      textInput.removeClass('invisible');
 	    }
 	  },
 	  out: {
@@ -115,17 +120,35 @@ Take 20 in the Phil, surely the most ornate pub in the land. Don't leave without
 	  }
 	});
 
-	msg.textillate('start');
+	$("form").submit(function(event) {
+	    textInput.animate({opacity: 0})
+	    textInput.val('');
 
-	msg.on('inAnimationEnd.tlt', function () {
-	    setTimeout(function() {
-	      msg.textillate('out');
-	    }, 10000);
+	    message1.textillate('out');
+
+	    message1.on('outAnimationEnd.tlt', function () {
+
+	      message1.remove();
+	      message2.removeClass("hidden");
+
+	      message2.textillate( {
+		in: {
+		  effect: 'fadeInLeft',
+		  delay: 20,
+		  callback: function() {
+		    textInput.animate({opacity: 1})
+		    textInput.removeClass('invisible');
+		  }
+		},
+	      });
+
+	    });
+
+	    event.preventDefault();
 	});
       };
 
       $('html').waitForImages(true).done(function() {
-	  console.log("GOT IMAGES");
 	  kickOffTextAnimation();
       });
     </script>
